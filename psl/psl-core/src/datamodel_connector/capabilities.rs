@@ -103,6 +103,7 @@ capabilities!(
     NativeUpsert,
     InsertReturning,
     UpdateReturning,
+    Distinct // Connector supports DB-level distinct (e.g. postgres)
 );
 
 /// Contains all capabilities that the connector is able to serve.
