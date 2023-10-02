@@ -19,8 +19,12 @@ import { PrismaLibSQL } from '@prisma/adapter-libsql'
 import {bindAdapter, DriverAdapter, ErrorCapturingDriverAdapter} from "@prisma/driver-adapter-utils";
 
 
-const SUPPORTED_ADAPTERS: Record<string, (_ : string) => Promise<DriverAdapter>>
-    = {"pg": pgAdapter, "neon:ws" : neonWsAdapter, "libsql": libsqlAdapter};
+const SUPPORTED_ADAPTERS: Record<string, (_ : string) => Promise<DriverAdapter>> = {
+  pg: pgAdapter,
+  'neon:ws': neonWsAdapter,
+  libsql: libsqlAdapter,
+  planetscale: planetScaleAdapter
+};
 
 // conditional debug logging based on LOG_LEVEL env var
 const debug = (() => {
@@ -248,6 +252,10 @@ async function neonWsAdapter(url: string): Promise<DriverAdapter> {
 async function libsqlAdapter(url: string): Promise<DriverAdapter> {
     const libsql = createClient({ url, intMode: 'bigint' })
     return new PrismaLibSQL(libsql)
+}
+
+async function planetScaleAdapter(): Promise<DriverAdapter> {
+  throw new Error('not implemented')
 }
 
 main().catch(err)

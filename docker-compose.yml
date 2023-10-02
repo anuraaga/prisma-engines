@@ -209,6 +209,8 @@ services:
     restart: always
     ports:
       - 33577:33577
+    networks:
+      - databases
     environment:
       PORT: 33574
       KEYSPACES: "test"
@@ -222,6 +224,8 @@ services:
     restart: always
     ports:
       - 33807:33807
+    networks:
+      - databases
     environment:
       PORT: 33804
       KEYSPACES: "test"
@@ -236,6 +240,8 @@ services:
     restart: always
     ports:
       - 33578:33577
+    networks:
+      - databases
     environment:
       PORT: 33574
       KEYSPACES: "shadow"
@@ -249,6 +255,8 @@ services:
     restart: always
     ports:
       - 33808:33807
+    networks:
+      - databases
     environment:
       PORT: 33804
       KEYSPACES: "shadow"
@@ -257,6 +265,22 @@ services:
       FOREIGN_KEY_MODE: "disallow"
       TABLET_REFRESH_INTERVAL: "500ms"
       ENABLE_ONLINE_DDL: false
+
+  ps-http-vitess-8_0:
+    image: prismagraphql/ps-http-simulator:latest
+    restart: always
+    ports:
+      - 33900:8080
+    networks:
+      - databases
+    environment:
+      HTTP_ADDR: "0.0.0.0"
+      HTTP_PORT: 8080
+      MYSQL_ADDR: "vitess-test-8_0"
+      MYSQL_PORT: 33807
+      MYSQL_IDLE_TIMEOUT: "5s"
+      MYSQL_MAX_ROWS: 1000
+      MYSQL_DBNAME: "test"
 
   mssql-2017:
     image: mcr.microsoft.com/mssql/server:2017-latest
